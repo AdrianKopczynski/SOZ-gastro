@@ -5,43 +5,42 @@ import pl.pjatk.SOZ_Gastro.Enums.UserType;
 
 @Entity
 @Table(name="user")
-public class User
-{
+public class User extends Meal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String username;
-    private String password;
+    private String loginPin;
     private boolean enabled;
     @Column(name = "user_type", columnDefinition = "enum('Admin', 'Inventory', 'Cashier' ")
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
-    public User(Integer id, String username, String loginPin, UserType userType, boolean enabled)
+    public User(Long id, String username, String loginPin, UserType userType, boolean enabled)
     {
         this.id = id;
         this.username = username;
-        this.password = loginPin;
+        this.loginPin = loginPin;
         this.userType = userType;
         this.enabled = enabled;
     }
     public User(){}
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setLoginPin(String loginPin) {
+        this.loginPin = loginPin;
     }
 
-    public String getPassword() {
-        return password;
+    public String getLoginPin() {
+        return loginPin;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -63,5 +62,9 @@ public class User
 
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }
