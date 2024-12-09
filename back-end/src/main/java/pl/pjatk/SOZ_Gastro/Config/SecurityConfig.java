@@ -14,17 +14,17 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfig {
 
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/hello"))
-                        .permitAll())
-                .authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/restricted/**"))
-                        .hasRole("ADMIN")
-                        .anyRequest()
-                        .authenticated())
+        return http
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers(new AntPathRequestMatcher("/management/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/order/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/user/**")).permitAll()
+                        //.requestMatchers(new AntPathRequestMatcher("/restricted/**")).hasRole("ADMIN")
+                        .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
+                .csrf().disable()
                 .build();
     }
 }
-
