@@ -2,7 +2,6 @@ from tkinter import Tk
 import tkinter as tk
 from loginScreen import LoginScreen
 from dashboard import Dashboard
-from create_table import CreateTableWindow
 
 
 class WindowManager:
@@ -23,6 +22,13 @@ class WindowManager:
                   fg="white", bg="red", font=("Arial", 15),
                   width=10).grid(row=0, column=1, sticky="e", padx=10)
 
+        self.logout_button = tk.Button(header_frame, text="Wyloguj", command=lambda: self.switch_to("LoginScreen"),
+                                       fg="white", bg="red", font=("Arial", 15), width=10
+                                       )
+        self.logout_button.grid(row=0, column=1, sticky="e", padx=10)
+
+        self.logout_button.grid_remove()
+
         self.root.grid_rowconfigure(1, weight=1)
         self.root.grid_columnconfigure(0, weight=1)
 
@@ -35,12 +41,13 @@ class WindowManager:
 
         if frame_name == "LoginScreen":
             self.current_frame = LoginScreen(self.root, self)
+            self.logout_button.grid_remove()
+
         elif frame_name == "Dashboard":
             self.current_frame = Dashboard(self.root, self)
-        elif frame_name == "CreateTable":
-            self.current_frame = CreateTableWindow(self.root)
+            self.logout_button.grid()
 
-        self.current_frame.grid(row=1, column=0, sticky="nsew")  
+        self.current_frame.grid(row=1, column=0, sticky="nsew")
 
 
 if __name__ == "__main__":
