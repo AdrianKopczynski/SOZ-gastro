@@ -4,7 +4,10 @@ import json
 import os
 from tabletop import Tabletop
 
-class tabletopEditor(tk.Frame):
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+TABLETOPS_FILE = os.path.join(BASE_DIR, 'tabletops.json')  
+
+class TabletopEditor(tk.Frame):
     def __init__(self, master, manager):
         super().__init__(master)
         self.manager = manager
@@ -55,8 +58,10 @@ class tabletopEditor(tk.Frame):
         x = 100
         y = 100
         color = "blue"
-
-        tabletop = Tabletop(self.canvas, x, y, size, color, name)
+        existing_ids = [tabletop.id for tabletop in self.tabletops]
+        new_id = max(existing_ids, default=0) + 1
+    
+        tabletop = Tabletop(self.canvas, x, y, size, color, name, new_id)
         self.tabletops.append(tabletop)
 
         self.save_tabletops()
@@ -82,9 +87,8 @@ class tabletopEditor(tk.Frame):
                     self.selected_tabletop = tabletop
                     self.drag_data['x'] = event.x
                     self.drag_data['y'] = event.y
-                    self.manager.switch_to("Dashboard")
+                    self.manager.switch_to("TabletopDashboard", table_name=tabletop.get_name() ,table_id=tabletop.get_id())
                     break
-    
         else:
             for tabletop in self.tabletops:
                 x1, y1, x2, y2 = self.canvas.coords(tabletop.id)
@@ -161,22 +165,31 @@ class tabletopEditor(tk.Frame):
         for tabletop in self.tabletops:
             x1, y1, x2, y2= self.canvas.coords(tabletop.id)
             data.append({
+                "id": tabletop.get_id(),
                 "name": tabletop.name,
                 "color": tabletop.color,
                 "x": x1,
                 "y": y1,
                 "size": tabletop.size
             })
-
-        with open("tabletops.json", "w") as file:
+ 
+        with open(TABLETOPS_FILE, "w") as file:
             json.dump(data, file, indent=4)
 
     def load_tabletops(self):
-        if os.path.exists("tabletops.json"):
-            with open("tabletops.json", "r") as file:
+        if os.path.exists(TABLETOPS_FILE):
+            with open(TABLETOPS_FILE, "r") as file:
                 data = json.load(file)
                 for item in data:
-                    tabletop = Tabletop(self.canvas, item["x"], item["y"], item["size"], item["color"], item["name"])
+                    tabletop = Tabletop(
+                    self.canvas,
+                    item["x"],
+                    item["y"],
+                    item["size"],
+                    item["color"],
+                    item["name"],
+                    item["id"]
+                )
                     self.tabletops.append(tabletop)
 
     def get_selected_tabletop_name(self):

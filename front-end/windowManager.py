@@ -1,14 +1,16 @@
 from tkinter import Tk
 import tkinter as tk
 from loginScreen import LoginScreen
-from tabletopDashboard import Dashboard
-from dashboard import tabletopEditor
+from tabletopDashboard import TabletopDashboard
+from tabletopEditor import TabletopEditor
+from orderEditor import OrderEditor
 
 class WindowManager:
     def __init__(self, root):
         self.root = root
         self.current_frame = None
         self.username = ""
+        self.current_table_id = None
         self.root.bind("<Escape>", self.exit_application)
 
         self.header_frame = tk.Frame(self.root, bg="lightgray")
@@ -50,7 +52,7 @@ class WindowManager:
     def exit_application(self, event=None):
         self.root.destroy()
 
-    def switch_to(self, frame_name):
+    def switch_to(self, frame_name, **kwargs):
         if self.current_frame:
             self.current_frame.destroy()
 
@@ -59,17 +61,23 @@ class WindowManager:
             self.logout_button.grid_remove()
             self.exit_button.grid()
             self.username = ""
-        elif frame_name == "Dashboard":
-            if isinstance(self.current_frame, tabletopEditor):
-                table_name = self.current_frame.get_selected_tabletop_name()
-            else:
-                table_name = None
 
-            self.current_frame = Dashboard(self.root, self, table_name)
+        elif frame_name == "TabletopDashboard":
+            table_name = kwargs.get("table_name",)
+            table_id = kwargs.get("table_id", self.current_table_id)
+            self.current_frame = TabletopDashboard(self.root, self, table_name=table_name, table_id=table_id)
             self.logout_button.grid()
             self.exit_button.grid_remove()
-        elif frame_name == "tabletopEditor":
-            self.current_frame = tabletopEditor(self.root, self)
+
+        elif frame_name == "TabletopEditor":
+            self.current_frame = TabletopEditor(self.root, self)
+            self.logout_button.grid()
+            self.exit_button.grid_remove()
+
+        elif frame_name == "OrderEditor":
+            order = kwargs.get("order", None)
+            table_name = kwargs.get("table_name")
+            self.current_frame = OrderEditor(self.root, self, order=order, table_name=table_name)
             self.logout_button.grid()
             self.exit_button.grid_remove()
 
