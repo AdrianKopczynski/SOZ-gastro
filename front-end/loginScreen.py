@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 import json
+import os
 
 class LoginScreen(tk.Frame):
     def __init__(self, master, manager):
@@ -51,7 +52,7 @@ class LoginScreen(tk.Frame):
             username = self.check_pin(self.value)
             if username:
                 self.manager.set_username(username)
-                self.manager.switch_to("tabletopEditor")
+                self.manager.switch_to("TabletopEditor")
             else:
                 self.value = ""
                 self.pin_label.config(text="Błędny PIN")
@@ -73,9 +74,11 @@ class LoginScreen(tk.Frame):
 
     def check_pin(self, pin):
         try:
-            with open('users.json', 'r') as f:
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+            file_path = os.path.join(base_dir, 'users.json')
+            
+            with open(file_path, 'r', encoding='utf-8') as f:
                 users = json.load(f)
-
             for username, stored_pin in users.items():
                 if stored_pin == pin:
                     return username

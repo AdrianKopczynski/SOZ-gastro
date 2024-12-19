@@ -1,0 +1,44 @@
+[
+    {
+        "meal_id": 1,
+        "name": "Pizza Margherita",
+        "category": "Pizza",
+        "price": 25.00
+    },
+    {
+        "meal_id": 2,
+        "name": "Spaghetti Carbonara",
+        "category": "Pasta",
+        "price": 28.00
+    },
+    {
+        "meal_id": 3,
+        "name": "Burger Wołowy",
+        "category": "Burgery",
+        "price": 30.00
+    },
+    {
+        "meal_id": 4,
+        "name": "Sałatka Cezar",
+        "category": "Sałatki",
+        "price": 20.00
+    },
+    {
+        "meal_id": 5,
+        "name": "Zupa Pomidorowa",
+        "category": "Zupy",
+        "price": 12.00
+    },
+    {
+        "meal_id": 6,
+        "name": "Kawa Latte",
+        "category": "Napoje",
+        "price": 10.00
+    },
+    {
+        "meal_id": 7,
+        "name": "Deser Tiramisu",
+        "category": "Desery",
+        "price": 15.00
+    }
+]
